@@ -19,6 +19,11 @@ let workCountdown = workDuration
 let breakCountdown = breakDuration
 
 /**
+ * État actuel - travail (WORK) ou pause (BREAKQ)
+ */
+let currentState = "WORK"
+
+/**
  * Identifiant du timer
  */
 let intervalID;
@@ -26,8 +31,11 @@ let intervalID;
 const startAndResetButton = document.getElementById("start-reset-button")
 const timerContainer = document.getElementById("timer-container")
 
+const workState = document.getElementById("work-state")
+const breakState = document.getElementById("break-state")
+
 startAndResetButton.addEventListener("click", e => {
-    if (!isTimerStarted()) {
+    if (!isTimerRunning()) {
         startTimer()
         startAndResetButton.textContent = "Arrêter"
     } else {
@@ -45,18 +53,49 @@ function startTimer() {
         if (workCountdown > 0) {
             workCountdown--
         } else {
+            currentState = "BREAK"
+
             if (breakCountdown > 0) {
                 breakCountdown--
             } else {
                 workCountdown = workDuration
                 breakCountdown = breakDuration
+                currentState = "WORK"
             }
         }
-        // Affichage du timer
-        timerContainer.innerHTML = getCountdownHTML(workCountdown > 0 ? workCountdown : breakCountdown)
-    }, 1000)
+        // Affichage du timer et de l'état
+        showTimer()
+        showState()
+    }, 1)
 }
 
+/**
+ * Affiche le timer
+ */
+function showTimer() {
+    if (currentState == "WORK") {
+        timerContainer.innerHTML = getCountdownHTML(workCountdown)
+    } else if (currentState == "BREAK") {
+        timerContainer.innerHTML = getCountdownHTML(breakCountdown)
+    }
+}
+
+/**
+ * Met à jour l'affichage de l'état
+ */
+function showState() {
+    if (currentState == "WORK") {
+        workState.classList.add("selected")
+        breakState.classList.remove("selected")
+    } else if (currentState == "BREAK") {
+        workState.classList.remove("selected")
+        breakState.classList.add("selected")
+    }
+}
+
+/**
+ * Arrête le timer
+ */
 function resetTimer() {
     // Suppression du timer
     clearInterval(intervalID)
@@ -64,6 +103,9 @@ function resetTimer() {
     // Réinitialisation des temps restant
     workCountdown = workDuration
     breakCountdown = breakDuration
+    // Met à jour l'affichage du timer et de l'état
+    showTimer()
+    showState()
 }
 
 /**
@@ -85,6 +127,6 @@ function getCountdownHTML(countdown) {
  * Vérifie si le timer est lancé
  * @returns Boolean
  */
-function isTimerStarted() {
+function isTimerRunning() {
     return intervalID != null
 }
