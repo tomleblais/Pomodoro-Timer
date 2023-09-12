@@ -19,7 +19,7 @@ let workCountdown = workDuration
 let breakCountdown = breakDuration
 
 /**
- * État actuel - travail (WORK) ou pause (BREAKQ)
+ * État actuel - travail (WORK) ou pause (BREAK)
  */
 let currentState = "WORK"
 
@@ -34,10 +34,26 @@ const timerContainer = document.getElementById("timer-container")
 const workState = document.getElementById("work-state")
 const breakState = document.getElementById("break-state")
 
+const workDurationConfigInput = document.getElementById("work-duration-config-input")
+const breakDurationConfigInput = document.getElementById("break-duration-config-input")
+
+const durationConfigContainer = document.getElementById("duration-config-container")
+
+workDurationConfigInput.addEventListener("change", e => {
+    workDuration = workDurationConfigInput.value * 60
+    resetTimer()
+    showTimer()
+})
+breakDurationConfigInput.addEventListener("change", e => {
+    breakDuration = breakDurationConfigInput.value * 60
+    resetTimer()
+    showTimer()
+})
+
 startAndResetButton.addEventListener("click", e => {
     if (!isTimerRunning()) {
         startTimer()
-        startAndResetButton.textContent = "Arrêter"
+        startAndResetButton.textContent = "Réinitialiser"
     } else {
         resetTimer()
         startAndResetButton.textContent = "Lancer"
@@ -48,6 +64,7 @@ startAndResetButton.addEventListener("click", e => {
  * Lance le timer
  */
 function startTimer() {
+    hideConfig()
     intervalID = setInterval(() => {
         // Décompte du temps restant
         if (workCountdown > 0) {
@@ -100,16 +117,19 @@ function resetTimer() {
     // Suppression du timer
     clearInterval(intervalID)
     intervalID = null
+    // Remet l'état à travail
+    currentState = "WORK"
     // Réinitialisation des temps restant
     workCountdown = workDuration
     breakCountdown = breakDuration
     // Met à jour l'affichage du timer et de l'état
     showTimer()
     showState()
+    showConfig()
 }
 
 /**
- * 
+ * Renvoie le code HTML du timer à partir d'un décompte
  * @param {number} countdown Temps restant
  * @returns Temps restant en format `mm:ss`
  */
@@ -130,3 +150,20 @@ function getCountdownHTML(countdown) {
 function isTimerRunning() {
     return intervalID != null
 }
+
+/**
+ * Cache le formulaire de configuration des durées
+ */
+function hideConfig() {
+    workDurationConfigInput.disabled = true
+    breakDurationConfigInput.disabled = true
+}
+
+/**
+ * Affiche le formulaire de configuration des durées
+ */
+function showConfig() {
+    workDurationConfigInput.disabled = false
+    breakDurationConfigInput.disabled = false
+}
+
