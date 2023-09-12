@@ -53,10 +53,10 @@ breakDurationConfigInput.addEventListener("change", e => {
 startAndResetButton.addEventListener("click", e => {
     if (!isTimerRunning()) {
         startTimer()
-        startAndResetButton.textContent = "Réinitialiser"
+        startAndResetButton.innerHTML = `<i class="fa-solid fa-rotate-left" style="color: #005fdc;"></i>`
     } else {
         resetTimer()
-        startAndResetButton.textContent = "Lancer"
+        startAndResetButton.innerHTML = `<i class="fa-solid fa-play" style="color: #005fdc;"></i>`
     }
 })
 
@@ -83,7 +83,7 @@ function startTimer() {
         // Affichage du timer et de l'état
         showTimer()
         showState()
-    }, 1)
+    }, 1000)
 }
 
 /**
@@ -137,10 +137,10 @@ function getCountdownHTML(countdown) {
     let minutes = Math.trunc(countdown / 60)
     let seconds = Math.trunc(countdown % 60)
 
-    let minutesString = `<span id="minutes"> ${minutes} </span>`
-    let secondsString = `<span id="seconds"> ${seconds.toString().padStart(2, "0")} </span>`
+    let minutesString = `<span id="minutes">${minutes.toString().padStart(2, "0")}</span>`
+    let secondsString = `<span id="seconds">${seconds.toString().padStart(2, "0")}</span>`
 
-    return `${minutesString} : ${secondsString}`
+    return `${minutesString}:${secondsString}`
 }
 
 /**

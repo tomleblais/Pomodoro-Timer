@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+    <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/styles.css">
+
+    <script src="https://kit.fontawesome.com/a73ab4fbdc.js" crossorigin="anonymous"></script>
 
     <title>Pomodoro Timer</title>
 </head>
@@ -15,30 +20,32 @@
             <h1>Timer Pomodoro</h1>
 
             <div id="state-container">
-                <div class="state" id="work-state">Travail</div>
+                <div class="state selected" id="work-state">Travail</div>
                 <div class="state" id="break-state">Pause</div>
             </div>
         
             <div id="timer-container">
-                <span id="minutes">25</span> : <span id="seconds">00</span>
+                <span id="minutes">25</span>:<span id="seconds">00</span>
             </div>
 
-            <button id="start-reset-button">Lancer</button>
+            <button id="start-reset-button"><i class="fa-solid fa-play" style="color: #005fdc;"></i></button>
 
             <div id="duration-config-container">
                 <div id="work-duration-config-container">
-                    <label for="workDurationConfig">Temps de travail :</label>
+                    <label for="workDurationConfig">Temps de travail</label>
                     <input type="range" name="workDurationConfig" id="work-duration-config-input" min="10" max="60" value="25" step="1">
                 </div>
                 <div id="break-duration-config-container">
-                    <label for="breakDurationConfig">Temps de pause :</label>
+                    <label for="breakDurationConfig">Temps de pause</label>
                     <input type="range" name="breakDurationConfig" id="break-duration-config-input" min="0" max="30" value="5" step="1">
                 </div>
             </div>
         </section>
     </main>
     <footer>
-        Exercice Javascript
+        <p>
+            Exercice Javascript
+        </p>
     </footer>
     
     <script src="./js/script.js"></script>

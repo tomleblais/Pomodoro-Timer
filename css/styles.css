@@ -1,0 +1,129 @@
+body {
+    font-family: "Comfortaa";
+}
+
+main {
+    padding: 20px;
+    padding-bottom: 60px;
+}
+
+section {
+
+    padding: 5px;
+
+    background-color: #fff;
+}
+
+h1 {
+    padding: 5px;
+
+    font-size: 25px;
+
+    text-transform: uppercase;
+    text-align: center;
+}
+
+div#state-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+div#state-container div.state {
+    display: inline-block;
+    width: 75px;
+    padding: 15px;
+    margin: 10px;
+
+    text-align: center;
+    opacity: .4;
+
+    border-radius: 10px;
+    box-shadow: 0 0 3px #ccc inset;
+
+    user-select: none;
+}
+
+div#state-container div.state.selected {
+    opacity: 1;
+    background-color: #0060df;
+    color: #fff;
+    box-shadow: 0 0 3px #ccc;
+}
+
+div#timer-container {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+
+    font-size: 40px;
+
+    text-align: center;
+    line-height: 200px;
+    font-family: "Consolas";
+
+    border-radius: 100px;
+    box-shadow: 0 0 10px #ccc inset;
+    
+    user-select: none;
+}
+
+button#start-reset-button {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 10px auto;
+
+    text-align: center;
+
+    border: 0;
+    border-radius: 25px;
+    box-shadow: 0 0 3px #ccc;
+
+    background-color: #fff;
+}
+button#start-reset-button:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+div#duration-config-container {
+    display: flex;
+    width: 75%;
+    align-items: center;
+    justify-content: center;
+
+    margin: 10px auto;
+}
+div#duration-config-container div {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    margin: 10px;
+}
+
+div#duration-config-container label {
+    display: block;
+    padding: 5px;
+
+    text-align: center;
+
+    cursor: text;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000;
+    padding: 20px;
+}
+
+footer p {
+    text-align: center;
+
+    color: #fff;
+}
