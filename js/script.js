@@ -31,6 +31,9 @@ let intervalID;
 const startAndResetButton = document.getElementById("start-reset-button")
 const timerContainer = document.getElementById("timer-container")
 
+const minutesSpan = document.getElementById("minutes")
+const secondsSpan = document.getElementById("seconds")
+
 const workState = document.getElementById("work-state")
 const breakState = document.getElementById("break-state")
 
@@ -39,15 +42,22 @@ const breakDurationConfigInput = document.getElementById("break-duration-config-
 
 const durationConfigContainer = document.getElementById("duration-config-container")
 
+window.addEventListener("load", e => {
+    refreshCanvas(0)
+})
+
 workDurationConfigInput.addEventListener("change", e => {
     workDuration = workDurationConfigInput.value * 60
     resetTimer()
     showTimer()
+    refreshCanvas(1)
 })
+
 breakDurationConfigInput.addEventListener("change", e => {
     breakDuration = breakDurationConfigInput.value * 60
     resetTimer()
     showTimer()
+    refreshCanvas(1)
 })
 
 startAndResetButton.addEventListener("click", e => {
@@ -65,7 +75,8 @@ startAndResetButton.addEventListener("click", e => {
  */
 function startTimer() {
     hideConfig()
-    intervalID = setInterval(() => {
+    refreshCanvas(1)
+    intervalID = setInterval(function () {
         // Décompte du temps restant
         if (workCountdown > 0) {
             workCountdown--
@@ -75,39 +86,21 @@ function startTimer() {
             if (breakCountdown > 0) {
                 breakCountdown--
             } else {
+                currentState = "WORK"
+
                 workCountdown = workDuration
                 breakCountdown = breakDuration
-                currentState = "WORK"
             }
         }
-        // Affichage du timer et de l'état
+        // Affichage du timer
         showTimer()
+        // Affichage de l'état
         showState()
-    }, 1000)
-}
-
-/**
- * Affiche le timer
- */
-function showTimer() {
-    if (currentState == "WORK") {
-        timerContainer.innerHTML = getCountdownHTML(workCountdown)
-    } else if (currentState == "BREAK") {
-        timerContainer.innerHTML = getCountdownHTML(breakCountdown)
-    }
-}
-
-/**
- * Met à jour l'affichage de l'état
- */
-function showState() {
-    if (currentState == "WORK") {
-        workState.classList.add("selected")
-        breakState.classList.remove("selected")
-    } else if (currentState == "BREAK") {
-        workState.classList.remove("selected")
-        breakState.classList.add("selected")
-    }
+        // Affichage du tournant
+        let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
+        console.log(percent);
+        refreshCanvas(percent)
+    }, 1)
 }
 
 /**
@@ -126,21 +119,90 @@ function resetTimer() {
     showTimer()
     showState()
     showConfig()
+    refreshCanvas(1)
 }
 
 /**
- * Renvoie le code HTML du timer à partir d'un décompte
- * @param {number} countdown Temps restant
- * @returns Temps restant en format `mm:ss`
+ * Affiche le timer
  */
-function getCountdownHTML(countdown) {
+function showTimer() {
+    if (currentState == "WORK") {
+        updateCountdown(workCountdown)
+    } else if (currentState == "BREAK") {
+        updateCountdown(breakCountdown)
+    }
+}
+
+/**
+ * Met à jour l'affichage de l'état
+ */
+function showState() {
+    if (currentState == "WORK") {
+        workState.classList.add("selected")
+        breakState.classList.remove("selected")
+    } else if (currentState == "BREAK") {
+        workState.classList.remove("selected")
+        breakState.classList.add("selected")
+    }
+}
+
+/** Arc entourant le timer **/
+const canvas = document.getElementById("timer-canvas")
+const context = canvas.getContext("2d")
+
+const centerX = canvas.width / 2
+const centerY = canvas.height / 2
+const radius = 102.5
+
+/**
+ * Dessine un arc autour du timer en fonction du temps écoulé
+ * @param {number} percent Pourcentage de temps écoulé
+ */
+function drawCanvas(percent) {
+    let startAngle = (-1 / 2) * Math.PI
+    let endAngle = startAngle + ((1 - percent) * 2) * Math.PI
+    let counterClockwise = true
+
+    // bar bleue
+    context.beginPath()
+    context.arc(centerX, centerY, radius, endAngle, startAngle, counterClockwise)
+    context.lineWidth = 5
+    context.strokeStyle = "#0060df"
+    context.stroke()
+    // bar grise
+    context.beginPath()
+    context.arc(centerX, centerY, radius, startAngle, endAngle, counterClockwise)
+    context.lineWidth = 5
+    context.strokeStyle = "#cccccc"
+    context.stroke()
+}
+
+/**
+ * Efface le canvas
+ */
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+}
+
+/**
+ * Met à jour le canvas
+ * @param {number} percent Pourcentage de temps écoulé
+ */
+function refreshCanvas(percent) {
+    clearCanvas()
+    drawCanvas(percent)
+}
+
+/**
+ * Met à jour le compteur dans le HTML à partir d'un temps écoulé
+ * @param {number} countdown Temps écoulé (en ms)
+ */
+function updateCountdown(countdown) {
     let minutes = Math.trunc(countdown / 60)
     let seconds = Math.trunc(countdown % 60)
 
-    let minutesString = `<span id="minutes">${minutes.toString().padStart(2, "0")}</span>`
-    let secondsString = `<span id="seconds">${seconds.toString().padStart(2, "0")}</span>`
-
-    return `${minutesString}:${secondsString}`
+    minutesSpan.textContent = minutes.toString().padStart(2, "0")
+    secondsSpan.textContent = seconds.toString().padStart(2, "0")
 }
 
 /**
@@ -166,4 +228,3 @@ function showConfig() {
     workDurationConfigInput.disabled = false
     breakDurationConfigInput.disabled = false
 }
-

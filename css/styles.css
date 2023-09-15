@@ -34,22 +34,31 @@ div#state-container div.state {
     display: inline-block;
     width: 75px;
     padding: 15px;
-    margin: 10px;
+    margin: 10px 0;
 
     text-align: center;
     opacity: .4;
 
-    border-radius: 10px;
     box-shadow: 0 0 3px #ccc inset;
 
     user-select: none;
+}
+
+div#state-container div.state#work-state {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+div#state-container div.state#break-state {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 div#state-container div.state.selected {
     opacity: 1;
     background-color: #0060df;
     color: #fff;
-    box-shadow: 0 0 3px #ccc;
+    box-shadow: 0 0 3px #fff inset;
 }
 
 div#timer-container {
@@ -68,6 +77,15 @@ div#timer-container {
     box-shadow: 0 0 10px #ccc inset;
     
     user-select: none;
+    z-index: 200;
+}
+
+div#timer-container canvas#timer-canvas {
+    position: relative;
+    top: -205px;
+    left: -5px;
+    background-color: transparent;
+    z-index: 100;
 }
 
 button#start-reset-button {
