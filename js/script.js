@@ -237,6 +237,9 @@ function showConfig() {
     breakDurationConfigInput.disabled = false
 }
 
+/**
+ * Emet un beep!
+ */
 function beep() {
     let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3')
     audio.play()
