@@ -1,12 +1,12 @@
 /**
  * Temps de travail en seconde (correspond à 25 min)
  */
-let workDuration = 1500
+let workDuration = parseInt(sessionStorage.getItem("work-duration")) || 1500
 
 /**
  * Temps de pause en seconde (correspond à 5 min)
  */
-let breakDuration = 300
+let breakDuration = parseInt(sessionStorage.getItem("break-duration")) || 300
 
 /**
  * Temps de travail restant en seconde
@@ -43,11 +43,15 @@ const breakDurationConfigInput = document.getElementById("break-duration-config-
 const durationConfigContainer = document.getElementById("duration-config-container")
 
 window.addEventListener("load", e => {
+    workDurationConfigInput.value = parseInt(workDuration / 60)
+    breakDurationConfigInput.value = parseInt(breakDuration / 60)
+    updateCountdown(workCountdown)
     refreshCanvas(0)
 })
 
 workDurationConfigInput.addEventListener("change", e => {
     workDuration = workDurationConfigInput.value * 60
+    sessionStorage.setItem("work-duration", workDuration)
     resetTimer()
     showTimer()
     refreshCanvas(1)
@@ -55,6 +59,7 @@ workDurationConfigInput.addEventListener("change", e => {
 
 breakDurationConfigInput.addEventListener("change", e => {
     breakDuration = breakDurationConfigInput.value * 60
+    sessionStorage.setItem("break-duration", breakDuration)
     resetTimer()
     showTimer()
     refreshCanvas(1)
@@ -83,10 +88,14 @@ function startTimer() {
         } else {
             currentState = "BREAK"
 
+            if (breakCountdown == breakDuration)
+                beep()
+
             if (breakCountdown > 0) {
                 breakCountdown--
             } else {
                 currentState = "WORK"
+                beep()
 
                 workCountdown = workDuration
                 breakCountdown = breakDuration
@@ -98,9 +107,8 @@ function startTimer() {
         showState()
         // Affichage du tournant
         let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
-        console.log(percent);
         refreshCanvas(percent)
-    }, 1)
+    }, 1000)
 }
 
 /**
@@ -227,4 +235,11 @@ function hideConfig() {
 function showConfig() {
     workDurationConfigInput.disabled = false
     breakDurationConfigInput.disabled = false
+}
+
+function beep() {
+    let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3')
+    audio.play()
+        .then(console.log)
+        .catch(console.log)
 }

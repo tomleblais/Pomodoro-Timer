@@ -77,7 +77,6 @@ div#timer-container {
     box-shadow: 0 0 10px #ccc inset;
     
     user-select: none;
-    z-index: 200;
 }
 
 div#timer-container canvas#timer-canvas {
@@ -85,7 +84,6 @@ div#timer-container canvas#timer-canvas {
     top: -205px;
     left: -5px;
     background-color: transparent;
-    z-index: 100;
 }
 
 button#start-reset-button {
