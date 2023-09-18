@@ -42,10 +42,14 @@ const breakDurationConfigInput = document.getElementById("break-duration-config-
 
 const durationConfigContainer = document.getElementById("duration-config-container")
 
+const workDurationConfigOuter = document.getElementById("work-duration-config-outer")
+const breakDurationConfigOuter = document.getElementById("break-duration-config-outer")
+
 window.addEventListener("load", e => {
     workDurationConfigInput.value = parseInt(workDuration / 60)
     breakDurationConfigInput.value = parseInt(breakDuration / 60)
     updateCountdown(workCountdown)
+    updateOuterDuration()
     refreshCanvas(0)
 })
 
@@ -55,6 +59,7 @@ workDurationConfigInput.addEventListener("change", e => {
     resetTimer()
     showTimer()
     refreshCanvas(0)
+    updateOuterDuration()
 })
 
 breakDurationConfigInput.addEventListener("change", e => {
@@ -63,15 +68,18 @@ breakDurationConfigInput.addEventListener("change", e => {
     resetTimer()
     showTimer()
     refreshCanvas(1)
+    updateOuterDuration()
 })
 
 startAndResetButton.addEventListener("click", e => {
     if (!isTimerRunning()) {
         startTimer()
-        startAndResetButton.innerHTML = `<i class="fa-solid fa-rotate-left" style="color: #005fdc;"></i>`
+        refreshCanvas(0)
+        startAndResetButton.innerHTML = `<i class="fa-solid fa-rotate-left"></i>`
     } else {
         resetTimer()
-        startAndResetButton.innerHTML = `<i class="fa-solid fa-play" style="color: #005fdc;"></i>`
+        refreshCanvas(0)
+        startAndResetButton.innerHTML = `<i class="fa-solid fa-play"></i>`
     }
 })
 
@@ -211,6 +219,14 @@ function updateCountdown(countdown) {
 
     minutesSpan.textContent = minutes.toString().padStart(2, "0")
     secondsSpan.textContent = seconds.toString().padStart(2, "0")
+}
+
+function updateOuterDuration() {
+    let newWorkDuration = workDurationConfigInput.value
+    let newBreakDuration = breakDurationConfigInput.value
+
+    workDurationConfigOuter.innerHTML = `${newWorkDuration}&nbsp;min`
+    breakDurationConfigOuter.innerHTML = `${newBreakDuration}&nbsp;min`
 }
 
 /**

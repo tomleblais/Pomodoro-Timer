@@ -23,6 +23,10 @@ h1 {
     text-align: center;
 }
 
+i {
+    color: #0060df;
+}
+
 div#state-container {
     display: flex;
     align-items: center;
@@ -127,6 +131,10 @@ div#duration-config-container label {
     text-align: center;
 
     cursor: text;
+}
+
+div.duration-config-outer {
+    text-align: center;
 }
 
 footer {
