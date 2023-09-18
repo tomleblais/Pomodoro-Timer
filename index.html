@@ -9,6 +9,7 @@
     <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" type="image/png" href="img/logo.png" />
 
     <script src="https://kit.fontawesome.com/a73ab4fbdc.js" crossorigin="anonymous"></script>
 
@@ -20,8 +21,12 @@
             <h1>Timer Pomodoro</h1>
 
             <div id="state-container">
-                <div class="state selected" id="work-state">Travail</div>
-                <div class="state" id="break-state">Pause</div>
+                <div class="state selected" id="work-state">
+                    <i class="fa-solid fa-person-digging" id="work-icon"></i>Travail
+                </div>
+                <div class="state" id="break-state">
+                    Pause<i class="fa-solid fa-mug-hot" id="break-icon"></i>
+                </div>
             </div>
         
             <div id="timer-container">
@@ -37,7 +42,6 @@
                     <i class="fa-solid fa-volume-high"></i>
                 </button>
             </div>
-
 
             <div id="duration-config-container">
                 <div id="work-duration-config-container">

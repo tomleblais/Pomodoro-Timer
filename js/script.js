@@ -103,11 +103,12 @@ muteButton.addEventListener("click", e => {
  */
 function startTimer() {
     hideConfig()
-    refreshCanvas(1)
+    refreshCanvas(0)
     intervalID = setInterval(function () {
         // Décompte du temps restant
         if (workCountdown > 0) {
             workCountdown--
+            updateTitle(workCountdown)
         } else {
             currentState = "BREAK"
 
@@ -117,6 +118,7 @@ function startTimer() {
 
             if (breakCountdown > 0) {
                 breakCountdown--
+                updateTitle(breakCountdown)
             } else {
                 currentState = "WORK"
                 if (!isMuted)
@@ -130,9 +132,11 @@ function startTimer() {
         showTimer()
         // Affichage de l'état
         showState()
+        // Met à jour le titre du document
         // Affichage du tournant
         let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
         refreshCanvas(percent)
+
     }, 1)
 }
 
@@ -247,6 +251,21 @@ function updateOuterDuration() {
 }
 
 /**
+ * Met à jour le titre du document avec le 
+ */
+function updateTitle(countdown) {
+    if (isTimerRunning()) {
+        let minutes = Math.trunc(countdown / 60)
+        let seconds = Math.trunc(countdown % 60)
+        let state = currentState == "WORK" ? "Travail" : "Pause"
+    
+        document.title = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} - ${state} - Pomodoro Timer`
+    } else {
+        document.title = "Pomodoro Timer"
+    }
+}
+
+/**
  * Vérifie si le timer est lancé
  * @returns Boolean
  */
@@ -276,6 +295,6 @@ function showConfig() {
 function beep() {
     let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3')
     audio.play()
-        .then(console.log)
-        .catch(console.log)
+        .then(() => 1)
+        .catch(() => 1)
 }
