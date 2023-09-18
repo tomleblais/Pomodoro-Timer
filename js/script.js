@@ -33,6 +33,8 @@ let intervalID
  */
 let isMuted = false
 
+let isNotificationEnabled = false
+
 const startAndResetButton = document.getElementById("start-reset-button")
 const muteButton = document.getElementById("mute-button")
 const timerContainer = document.getElementById("timer-container")
@@ -57,6 +59,11 @@ window.addEventListener("load", e => {
     updateCountdown(workCountdown)
     updateOuterDuration()
     refreshCanvas(0)
+
+    Notification.requestPermission()
+    .then(res => {
+        isNotificationEnabled = true
+    })
 })
 
 workDurationConfigInput.addEventListener("change", e => {
@@ -112,17 +119,20 @@ function startTimer() {
         } else {
             currentState = "BREAK"
 
-            if (breakCountdown == breakDuration)
-                if (!isMuted)
-                    beep()
+            if (breakCountdown == breakDuration) {
+                if (!isMuted) beep()
+                if (isNotificationEnabled) notif(currentState)
+            }
+
 
             if (breakCountdown > 0) {
                 breakCountdown--
                 updateTitle(breakCountdown)
             } else {
                 currentState = "WORK"
-                if (!isMuted)
-                    beep()
+                if (!isMuted) beep()
+                if (isNotificationEnabled) notif(currentState)
+
 
                 workCountdown = workDuration
                 breakCountdown = breakDuration
@@ -137,7 +147,7 @@ function startTimer() {
         let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
         refreshCanvas(percent)
 
-    }, 1)
+    }, 1000)
 }
 
 /**
@@ -156,7 +166,7 @@ function resetTimer() {
     showTimer()
     showState()
     showConfig()
-    refreshCanvas(1)
+    refreshCanvas(0)
 }
 
 /**
@@ -297,4 +307,14 @@ function beep() {
     audio.play()
         .then(() => 1)
         .catch(() => 1)
+}
+
+function notif(state) {
+    let body = state == "WORK" ? "On se remet au boulot !" : "Il est temps de faire une pause."
+    let icon = "./img/logo.png"
+
+    const notification = new Notification("Pomodoro Timer", {
+        body: body,
+        icon: icon,
+    });
 }
