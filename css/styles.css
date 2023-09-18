@@ -90,11 +90,19 @@ div#timer-container canvas#timer-canvas {
     background-color: transparent;
 }
 
-button#start-reset-button {
-    display: block;
+div#buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+}
+
+button#start-reset-button,
+button#mute-button {
+    display: inline-block;
     width: 50px;
     height: 50px;
-    margin: 10px auto;
+    margin: 10px 10px;
 
     text-align: center;
 
@@ -104,7 +112,9 @@ button#start-reset-button {
 
     background-color: #fff;
 }
-button#start-reset-button:hover {
+
+button#start-reset-button:hover,
+button#mute-button:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }

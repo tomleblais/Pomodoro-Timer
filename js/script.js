@@ -26,9 +26,15 @@ let currentState = "WORK"
 /**
  * Identifiant du timer
  */
-let intervalID;
+let intervalID
+
+/**
+ * 
+ */
+let isMuted = false
 
 const startAndResetButton = document.getElementById("start-reset-button")
+const muteButton = document.getElementById("mute-button")
 const timerContainer = document.getElementById("timer-container")
 
 const minutesSpan = document.getElementById("minutes")
@@ -67,7 +73,7 @@ breakDurationConfigInput.addEventListener("change", e => {
     localStorage.setItem("break-duration", breakDuration)
     resetTimer()
     showTimer()
-    refreshCanvas(1)
+    refreshCanvas(0)
     updateOuterDuration()
 })
 
@@ -80,6 +86,15 @@ startAndResetButton.addEventListener("click", e => {
         resetTimer()
         refreshCanvas(0)
         startAndResetButton.innerHTML = `<i class="fa-solid fa-play"></i>`
+    }
+})
+
+muteButton.addEventListener("click", e => {
+    isMuted = !isMuted
+    if (!isMuted) {
+        muteButton.innerHTML = `<i class="fa-solid fa-volume-high"></i>`
+    } else {
+        muteButton.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`
     }
 })
 
@@ -97,13 +112,15 @@ function startTimer() {
             currentState = "BREAK"
 
             if (breakCountdown == breakDuration)
-                beep()
+                if (!isMuted)
+                    beep()
 
             if (breakCountdown > 0) {
                 breakCountdown--
             } else {
                 currentState = "WORK"
-                beep()
+                if (!isMuted)
+                    beep()
 
                 workCountdown = workDuration
                 breakCountdown = breakDuration
