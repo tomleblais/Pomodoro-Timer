@@ -54,7 +54,7 @@ workDurationConfigInput.addEventListener("change", e => {
     localStorage.setItem("work-duration", workDuration)
     resetTimer()
     showTimer()
-    refreshCanvas(1)
+    refreshCanvas(0)
 })
 
 breakDurationConfigInput.addEventListener("change", e => {
