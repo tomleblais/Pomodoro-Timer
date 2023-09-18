@@ -1,12 +1,12 @@
 /**
  * Temps de travail en seconde (correspond à 25 min)
  */
-let workDuration = parseInt(sessionStorage.getItem("work-duration")) || 1500
+let workDuration = parseInt(localStorage.getItem("work-duration")) || 1500
 
 /**
  * Temps de pause en seconde (correspond à 5 min)
  */
-let breakDuration = parseInt(sessionStorage.getItem("break-duration")) || 300
+let breakDuration = parseInt(localStorage.getItem("break-duration")) || 300
 
 /**
  * Temps de travail restant en seconde
@@ -51,7 +51,7 @@ window.addEventListener("load", e => {
 
 workDurationConfigInput.addEventListener("change", e => {
     workDuration = workDurationConfigInput.value * 60
-    sessionStorage.setItem("work-duration", workDuration)
+    localStorage.setItem("work-duration", workDuration)
     resetTimer()
     showTimer()
     refreshCanvas(1)
@@ -59,7 +59,7 @@ workDurationConfigInput.addEventListener("change", e => {
 
 breakDurationConfigInput.addEventListener("change", e => {
     breakDuration = breakDurationConfigInput.value * 60
-    sessionStorage.setItem("break-duration", breakDuration)
+    localStorage.setItem("break-duration", breakDuration)
     resetTimer()
     showTimer()
     refreshCanvas(1)
@@ -108,7 +108,7 @@ function startTimer() {
         // Affichage du tournant
         let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
         refreshCanvas(percent)
-    }, 1000)
+    }, 1)
 }
 
 /**
