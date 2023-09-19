@@ -147,7 +147,7 @@ div#duration-config-container label {
 div#duration-config-container input {
     display: block;
     width: 120px;
-    margin: 10px;
+    margin: 10px auto;
 }
 
 div.duration-config-outer {
