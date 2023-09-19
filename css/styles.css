@@ -8,7 +8,6 @@ main {
 }
 
 section {
-
     padding: 5px;
 
     background-color: #fff;
@@ -21,10 +20,6 @@ h1 {
 
     text-transform: uppercase;
     text-align: center;
-}
-
-i {
-    color: auto;
 }
 
 div#state-container {
@@ -41,7 +36,6 @@ div#state-container div.state {
     margin: 10px 0;
 
     text-align: center;
-    opacity: .4;
 
     box-shadow: 0 0 3px #ccc inset;
 
@@ -49,10 +43,9 @@ div#state-container div.state {
 }
 
 div#state-container div.state.selected {
-    opacity: 1;
     background-color: #0060df;
     color: #fff;
-    box-shadow: 0 0 3px #fff inset;
+    box-shadow: none;
 }
 
 div#state-container div.state i#work-icon {
@@ -83,7 +76,7 @@ div#timer-container {
 
     text-align: center;
     line-height: 200px;
-    font-family: "Consolas";
+    font-family: "Roboto Mono", "Consolas";
 
     border-radius: 100px;
     box-shadow: 0 0 10px #ccc inset;
@@ -93,8 +86,11 @@ div#timer-container {
 
 div#timer-container canvas#timer-canvas {
     position: relative;
+    width: 210px;
+    height: 210px;
     top: -205px;
     left: -5px;
+
     background-color: transparent;
 }
 
@@ -136,8 +132,6 @@ div#duration-config-container {
     margin: 10px auto;
 }
 div#duration-config-container div {
-    display: flex;
-    flex-direction: column;
     width: 150px;
     margin: 10px;
 }
@@ -160,12 +154,12 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #000;
     padding: 20px;
+
+    background-color: #000;
 }
 
 footer p {
     text-align: center;
-
     color: #fff;
 }

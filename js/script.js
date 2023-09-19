@@ -29,10 +29,13 @@ let currentState = "WORK"
 let intervalID
 
 /**
- * 
+ * Vaut vrai si le son est activé
  */
 let isMuted = false
 
+/**
+ * Vaut vrai si les notifications sont activés sur le site
+ */
 let isNotificationEnabled = false
 
 const startAndResetButton = document.getElementById("start-reset-button")
@@ -61,12 +64,12 @@ window.addEventListener("load", e => {
     refreshCanvas(0)
 
     Notification.requestPermission()
-    .then(res => {
-        isNotificationEnabled = true
-    })
+        .then(res => {
+            isNotificationEnabled = true
+        })
 })
 
-workDurationConfigInput.addEventListener("change", e => {
+workDurationConfigInput.addEventListener("input", e => {
     workDuration = workDurationConfigInput.value * 60
     localStorage.setItem("work-duration", workDuration)
     resetTimer()
@@ -75,7 +78,7 @@ workDurationConfigInput.addEventListener("change", e => {
     updateOuterDuration()
 })
 
-breakDurationConfigInput.addEventListener("change", e => {
+breakDurationConfigInput.addEventListener("input", e => {
     breakDuration = breakDurationConfigInput.value * 60
     localStorage.setItem("break-duration", breakDuration)
     resetTimer()
@@ -88,10 +91,14 @@ startAndResetButton.addEventListener("click", e => {
     if (!isTimerRunning()) {
         startTimer()
         refreshCanvas(0)
+        updateTitle(workDuration)
+        startAndResetButton.title = "Réinitialiser le timer"
         startAndResetButton.innerHTML = `<i class="fa-solid fa-rotate-left"></i>`
     } else {
         resetTimer()
         refreshCanvas(0)
+        updateTitle(workDuration)
+        startAndResetButton.title = "Lancer le timer"
         startAndResetButton.innerHTML = `<i class="fa-solid fa-play"></i>`
     }
 })
@@ -99,8 +106,10 @@ startAndResetButton.addEventListener("click", e => {
 muteButton.addEventListener("click", e => {
     isMuted = !isMuted
     if (!isMuted) {
+        muteButton.title = "Désactiver le son"
         muteButton.innerHTML = `<i class="fa-solid fa-volume-high"></i>`
     } else {
+        muteButton.title = "Activer le son"
         muteButton.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`
     }
 })
@@ -111,7 +120,7 @@ muteButton.addEventListener("click", e => {
 function startTimer() {
     hideConfig()
     refreshCanvas(0)
-    intervalID = setInterval(function () {
+    intervalID = setInterval(() => {
         // Décompte du temps restant
         if (workCountdown > 0) {
             workCountdown--
@@ -142,7 +151,6 @@ function startTimer() {
         showTimer()
         // Affichage de l'état
         showState()
-        // Met à jour le titre du document
         // Affichage du tournant
         let percent = currentState == "WORK" ? workCountdown / workDuration : breakCountdown / breakDuration
         refreshCanvas(percent)
@@ -210,13 +218,15 @@ function drawCanvas(percent) {
     let endAngle = startAngle + ((1 - percent) * 2) * Math.PI
     let counterClockwise = true
 
-    // bar bleue
-    context.beginPath()
-    context.arc(centerX, centerY, radius, endAngle, startAngle, counterClockwise)
-    context.lineWidth = 5
-    context.strokeStyle = "#0060df"
-    context.stroke()
-    // bar grise
+    if (percent != 0) {
+        // barre bleue
+        context.beginPath()
+        context.arc(centerX, centerY, radius, endAngle, startAngle, counterClockwise)
+        context.lineWidth = 5
+        context.strokeStyle = "#0060df"
+        context.stroke()
+    }
+    // barre grise
     context.beginPath()
     context.arc(centerX, centerY, radius, startAngle, endAngle, counterClockwise)
     context.lineWidth = 5
@@ -256,8 +266,8 @@ function updateOuterDuration() {
     let newWorkDuration = workDurationConfigInput.value
     let newBreakDuration = breakDurationConfigInput.value
 
-    workDurationConfigOuter.innerHTML = `${newWorkDuration}&nbsp;min`
-    breakDurationConfigOuter.innerHTML = `${newBreakDuration}&nbsp;min`
+    workDurationConfigOuter.textContent = newWorkDuration.toString()
+    breakDurationConfigOuter.textContent = newBreakDuration.toString()
 }
 
 /**
@@ -267,9 +277,9 @@ function updateTitle(countdown) {
     if (isTimerRunning()) {
         let minutes = Math.trunc(countdown / 60)
         let seconds = Math.trunc(countdown % 60)
-        let state = currentState == "WORK" ? "Travail" : "Pause"
+        let emojiState = currentState == "WORK" ? "📖" : "☕"
     
-        document.title = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} - ${state} - Pomodoro Timer`
+        document.title = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} ${emojiState} Pomodoro Timer`
     } else {
         document.title = "Pomodoro Timer"
     }
@@ -303,18 +313,22 @@ function showConfig() {
  * Emet un beep!
  */
 function beep() {
-    let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3')
+    let audio = new Audio("https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3")
     audio.play()
         .then(() => 1)
         .catch(() => 1)
 }
 
+/**
+ * Emet une notification
+ * @param {string} state Etat (WORK ou BREAK)
+ */
 function notif(state) {
-    let body = state == "WORK" ? "On se remet au boulot !" : "Il est temps de faire une pause."
+    let body = state == "WORK" ? "Au boulot !" : "Il est temps de faire une pause."
     let icon = "./img/logo.png"
 
     const notification = new Notification("Pomodoro Timer", {
         body: body,
         icon: icon,
-    });
+    })
 }
