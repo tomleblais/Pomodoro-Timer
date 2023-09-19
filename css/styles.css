@@ -17,7 +17,6 @@ h1 {
     padding: 5px;
 
     font-size: 25px;
-
     text-transform: uppercase;
     text-align: center;
 }
@@ -43,8 +42,9 @@ div#state-container div.state {
 }
 
 div#state-container div.state.selected {
-    background-color: #0060df;
     color: #fff;
+
+    background-color: #0060df;
     box-shadow: none;
 }
 
@@ -73,10 +73,9 @@ div#timer-container {
     margin: 20px auto;
 
     font-size: 40px;
-
+    font-family: "Roboto Mono", "Consolas", monospace;
     text-align: center;
     line-height: 200px;
-    font-family: "Roboto Mono", "Consolas";
 
     border-radius: 100px;
     box-shadow: 0 0 10px #ccc inset;
@@ -128,24 +127,31 @@ div#duration-config-container {
     width: 75%;
     align-items: center;
     justify-content: center;
-
     margin: 10px auto;
 }
-div#duration-config-container div {
-    width: 150px;
-    margin: 10px;
+
+div#duration-config-container div#work-duration-config-container,
+div#duration-config-container div#break-duration-config-container {
+    width: 170px;
+    padding: 5px;
 }
 
 div#duration-config-container label {
     display: block;
-    padding: 5px;
 
     text-align: center;
 
     cursor: text;
 }
 
+div#duration-config-container input {
+    display: block;
+    width: 120px;
+    margin: 10px;
+}
+
 div.duration-config-outer {
+    display: block;
     text-align: center;
 }
 
